@@ -514,9 +514,9 @@ workflows:
   default:
     jobs:
       - terraform-plan
-      - terraform-apply
+      - terraform-apply:
           requires: [terraform-plan]
-          
+
       # - test-frontend:
       #     requires: [build-frontend]
       # - test-backend:
