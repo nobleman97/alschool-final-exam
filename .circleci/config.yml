@@ -168,10 +168,10 @@ jobs:
             kubectl apply -f adminer
 
             LB_ADDR=$(kubectl get svc -n ingress-nginx | grep Load | awk '{print $4}')
-            LB_IP=$(timeout 3s traceroute $LB_ADDR | head -n 1 | grep -oP '\(\K[\d.]+(?=\))')
-            echo "The Load Balancer DNS name is: ${LB_ADDR} and it's IP address is: ${LB_IP}"
-
-            echo "Use this info to configure the A name records in Route 53" 
+            echo "$(timeout 3s traceroute $LB_ADDR | head -n 1 )"
+            echo "NOTE the IP address of the LoadBalancer"
+          
+            echo "Use this info to configure the A name records in Route 53"  
 
   deploy-monitoring:
     docker:
@@ -189,8 +189,8 @@ jobs:
             kubectl apply -f adminer
 
             LB_ADDR=$(kubectl get svc -n ingress-nginx | grep Load | awk '{print $4}')
-            LB_IP=$(timeout 3s traceroute $LB_ADDR | head -n 1 | grep -oP '\(\K[\d.]+(?=\))')
-            echo "The Load Balancer DNS name is: ${LB_ADDR} and it's IP address is: ${LB_IP}"
+            echo "$(timeout 3s traceroute $LB_ADDR | head -n 1 )"
+            echo "NOTE the IP address of the LoadBalancer"
 
             echo "Use this info to configure the A name records in Route 53"          
 
