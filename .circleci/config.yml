@@ -184,9 +184,11 @@ jobs:
             kops export kubeconfig --admin
 
       - run:
-          name: Create adminer app and resource
+          name: Create monitoring app and resource
           command: |
-            kubectl apply -f adminer
+            kubectl apply -f microservices-demo/deploy/kubernetes/manifests-monitoring
+
+            kubectl apply -f manifests/monitoring-ingress.yml
 
             LB_ADDR=$(kubectl get svc -n ingress-nginx | grep Load | awk '{print $4}')
             echo "$(timeout 3s traceroute $LB_ADDR | head -n 1 )"
