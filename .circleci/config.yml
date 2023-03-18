@@ -56,6 +56,23 @@ jobs:
           paths: [.terraform]
           key: terraform-init
 
+  terraform-apply:
+    docker:
+      - image: 4568910/examcontainer
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [terraform-init]
+      - run:
+          name: Terraform plan
+          command: |
+            terraform init
+            terraform apply
+      - save_cache:
+          paths: [.terraform]
+          key: terraform-init
+
+
   # build-backend:
   #   docker:
   #     - image: circleci/node:13.8.0
@@ -497,7 +514,9 @@ workflows:
   default:
     jobs:
       - terraform-plan
-      # - build-backend
+      - terraform-apply
+          requires: [terraform-plan]
+          
       # - test-frontend:
       #     requires: [build-frontend]
       # - test-backend:
