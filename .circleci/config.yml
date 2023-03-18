@@ -64,13 +64,37 @@ jobs:
       - restore_cache:
           keys: [terraform-init]
       - run:
-          name: Terraform plan
+          name: Terraform apply
           command: |
             terraform init
             terraform apply
       - save_cache:
           paths: [.terraform]
           key: terraform-init
+
+    create-cluster:
+    docker:
+      - image: 4568910/examcontainer
+    steps:
+      - checkout
+      # - restore_cache:
+      #     keys: [terraform-init]
+      - run:
+          name: Create the cluster
+          command: |
+            kops update cluster \
+            --name=${KOPS_CLUSTER_NAME} \
+            --node-count 2 \
+            --cloud=aws \
+            --node-size ${NODE_SIZE} \
+            --ssh-public-key=~/.ssh/exam4.pub \
+            --zones=us-west-2a \
+            --control-plane-size $CONTROL_PLANE_SIZE \
+            --discovery-store=${KOPS_STATE_STORE}/${KOPS_CLUSTER_NAME}/discovery \
+            # --yes
+      # - save_cache:
+      #     paths: [.terraform]
+      #     key: terraform-init
 
 
   # build-backend:
