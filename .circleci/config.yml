@@ -213,7 +213,7 @@ workflows:
       # - deploy-ingress-controller
       # - create-sockshop-ingress:
       #     requires: [deploy-ingress-controller]
-      - deploy-adminer-app
+      - deploy-adminer-app:
           requires: [terraform-apply]
-      - deploy-monitoring
+      - deploy-monitoring:
           requires: [deploy-adminer-app]
