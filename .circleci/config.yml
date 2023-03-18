@@ -93,7 +93,7 @@ jobs:
             --node-count 2 \
             --cloud=aws \
             --node-size ${NODE_SIZE} \
-            --ssh-public-key="- 6c:bd:71:60:eb:fa:51:e7:9a:e3:22:a9:81:79:1f:62" \
+            --ssh-public-key= ${SSH_PUB_KEY} \
             --zones=us-west-2a \
             --control-plane-size $CONTROL_PLANE_SIZE \
             --discovery-store=${KOPS_STATE_STORE}/${KOPS_CLUSTER_NAME}/discovery \
