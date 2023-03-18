@@ -46,9 +46,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys:
-            - terraform-{{ checksum ".terraform" }}
-            - terraform-
+          keys: [terraform-init]
       - run:
           name: Terraform plan
           command: |
@@ -56,8 +54,8 @@ jobs:
             terraform plan
       - save_cache:
           paths: 
-            - ./.terraform/
-          key: terraform-{{ checksum ".terraform" }}
+            - [.terraform]
+          key: terraform-init
 
   # build-backend:
   #   docker:
