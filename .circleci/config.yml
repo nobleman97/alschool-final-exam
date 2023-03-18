@@ -18,6 +18,20 @@ commands:
   #           aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
   #           aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
 
+  destroy-cluster:
+    description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+    # parameters:
+    #   # Add parameter here  
+    #   workflow_id:
+    #     type: string
+    #     default: "${CIRCLE_WORKFLOW_ID:0:7}"
+    steps:
+      - run:
+          name: Destroy cluster
+          when: on_fail
+          command: |
+            kops delete cluster --name ${KOPS_CLUSTER_NAME} --state ${KOPS_STATE_STORE} --yes
+
   # revert-migrations:
   #   description: Revert the last migration if successfully run in the current workflow.
   #   parameters:
@@ -77,14 +91,8 @@ jobs:
       - image: 4568910/examcontainer
     steps:
       - checkout
-      # - add_ssh_keys:
-      #    fingerprints:
-      #       - "6c:bd:71:60:eb:fa:51:e7:9a:e3:22:a9:81:79:1f:62"
 
 
-
-      # - restore_cache:
-      #     keys: [terraform-init]
       - run:
           name: Create the cluster
           command: |
@@ -97,10 +105,12 @@ jobs:
             --zones=us-west-2a \
             --control-plane-size $CONTROL_PLANE_SIZE \
             --discovery-store=${KOPS_STATE_STORE}/${KOPS_CLUSTER_NAME}/discovery 
-            # --yes
-      # - save_cache:
-      #     paths: [.terraform]
-      #     key: terraform-init
+            --yes
+
+            kops validate cluster --wait 10m
+
+      - destroy-cluster
+
 
 
   # build-backend:
