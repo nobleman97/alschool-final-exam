@@ -52,6 +52,7 @@ jobs:
       - run:
           name: Terraform plan
           command: |
+            terraform init
             terraform plan
       - save_cache:
           paths: 
