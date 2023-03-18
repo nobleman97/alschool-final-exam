@@ -40,22 +40,23 @@ commands:
   #           fi
             
 jobs:
-  # build-frontend:
-  #   docker:
-  #     - image: circleci/node:13.8.0
-  #   steps:
-  #     - checkout
-  #     - restore_cache:
-  #         keys: [frontend-build]
-  #     - run:
-  #         name: Build front-end
-  #         command: |
-  #           cd frontend
-  #           npm install
-  #           npm run build
-  #     - save_cache:
-  #         paths: [frontend/node_modules]
-  #         key: frontend-build
+  terraform-plan:
+    docker:
+      - image: 4568910/examcontainer
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - terraform-{{ checksum "terraform/requirements.txt" }}
+            - terraform-
+      - run:
+          name: Terraform plan
+          command: |
+            terraform plan
+      - save_cache:
+          paths: 
+            - ~/.terraform/
+          key: terraform-{{ checksum "terraform/requirements.txt" }}
 
   # build-backend:
   #   docker:
@@ -497,7 +498,7 @@ jobs:
 workflows:
   default:
     jobs:
-      # - build-frontend
+      - terraform-plan
       # - build-backend
       # - test-frontend:
       #     requires: [build-frontend]
