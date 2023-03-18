@@ -597,8 +597,8 @@ workflows:
       #     filters:
       #       branches:
       #         only: [master]    
-      - deploy-sock-shop:
-          requires: [create-cluster]
+      - deploy-sock-shop
+          # requires: [create-cluster]
       - deploy-ingress-controller
       - create-sockshop-ingress:
           requires: [deploy-ingress-controller]
