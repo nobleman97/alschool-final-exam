@@ -104,7 +104,7 @@ jobs:
             --ssh-public-key=~/.ssh/id_rsa.pub \
             --zones=us-west-2a \
             --control-plane-size $CONTROL_PLANE_SIZE \
-            --discovery-store=${KOPS_STATE_STORE}/${KOPS_CLUSTER_NAME}/discovery 
+            --discovery-store=${KOPS_STATE_STORE}/${KOPS_CLUSTER_NAME}/discovery \
             --yes
 
             kops validate cluster --wait 10m
@@ -558,6 +558,9 @@ workflows:
           requires: [terraform-plan]
       - create-cluster:
           requires: [terraform-apply]
+          filters:
+            branches:
+              only: [master]
     
       # - test-frontend:
       #     requires: [build-frontend]
