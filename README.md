@@ -125,12 +125,34 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 
 Create an ingress resource for sock-shop frontend
 ```bash
+
+ # Ensure that you change the host in all ingress files and 
+ # create an appropriate A name record where necessary
 kubectl apply -f manifests/sock-ingress.yml 
 ```
+
+## Step 10: Deploy Adminer
+```bash
+kubectl apply -f adminer
+```
+
+## Step 11: Deploy Monitoring and the ingress for them
+
+
+
+```bash
+kubectl apply -f microservices-demo/deploy/kubernetes/manifests-monitoring
+
+ # Deploy the ingress resources
+ # Ensure that you change the host in all ingress files and 
+ # create an appropriate A name record where necessary
+kubectl apply -f manifests/monitoring-ingress.yml
+```
+
 
 # Troubleshooting
 - 1. If at any point in time
 
 
 
-
+timeout 2s ping lB | grep -oP '\(\K[\d.]+(?=\))'
