@@ -24,7 +24,7 @@ RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/s
     echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check && \
     install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
-RUN apt install inetutils-ping -y
+RUN apt install inetutils-ping traceroute -y
 
 
 
