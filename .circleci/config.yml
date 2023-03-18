@@ -82,7 +82,7 @@ jobs:
       - run:
           name: Create the cluster
           command: |
-            kops update cluster \
+            kops create cluster \
             --name=${KOPS_CLUSTER_NAME} \
             --node-count 2 \
             --cloud=aws \
