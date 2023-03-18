@@ -77,6 +77,12 @@ jobs:
       - image: 4568910/examcontainer
     steps:
       - checkout
+      - add_ssh_keys:
+         fingerprints:
+            - "6c:bd:71:60:eb:fa:51:e7:9a:e3:22:a9:81:79:1f:62"
+
+
+
       # - restore_cache:
       #     keys: [terraform-init]
       - run:
@@ -87,7 +93,7 @@ jobs:
             --node-count 2 \
             --cloud=aws \
             --node-size ${NODE_SIZE} \
-            --ssh-public-key=~/.ssh/exam4.pub \
+            --ssh-public-key="- 6c:bd:71:60:eb:fa:51:e7:9a:e3:22:a9:81:79:1f:62"\
             --zones=us-west-2a \
             --control-plane-size $CONTROL_PLANE_SIZE \
             --discovery-store=${KOPS_STATE_STORE}/${KOPS_CLUSTER_NAME}/discovery \
