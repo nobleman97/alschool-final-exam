@@ -134,4 +134,3 @@ kubectl apply -f manifests/sock-ingress.yml
 
 
 
-

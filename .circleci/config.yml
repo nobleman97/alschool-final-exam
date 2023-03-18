@@ -1,36 +1,24 @@
 version: 2.1
 
 commands:
-  # destroy-environment:
-  #   description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
-  #   parameters:
-  #     # Add parameter here  
-  #     workflow_id:
-  #       type: string
-  #       default: "${CIRCLE_WORKFLOW_ID:0:7}"
-  #   steps:
-  #     - run:
-  #         name: Destroy environments
-  #         when: on_fail
-  #         command: |
-  #           #!/bin/bash -eo pipefail
-  #           aws s3 rm "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
-  #           aws cloudformation delete-stack --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"
-  #           aws cloudformation delete-stack --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}"
-
   destroy-cluster:
-    description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
-    # parameters:
-    #   # Add parameter here  
-    #   workflow_id:
-    #     type: string
-    #     default: "${CIRCLE_WORKFLOW_ID:0:7}"
+    description: Deletes cluster if there was an error
     steps:
       - run:
           name: Destroy cluster
           when: on_fail
           command: |
             kops delete cluster --name ${KOPS_CLUSTER_NAME} --state ${KOPS_STATE_STORE} --yes
+
+  delete-sock-shop:
+    description: Delete sock-shop if an error occurs
+    steps:
+      - run:
+          name: Destroy cluster
+          when: on_fail
+          command: |
+            kubectl delete -f microservices-demo/deploy/kubernetes/complete-demo.yaml
+
 
   # revert-migrations:
   #   description: Revert the last migration if successfully run in the current workflow.
@@ -91,8 +79,6 @@ jobs:
       - image: 4568910/examcontainer
     steps:
       - checkout
-
-
       - run:
           name: Create the cluster
           command: |
@@ -110,6 +96,56 @@ jobs:
             kops validate cluster --wait 10m
 
       - destroy-cluster
+
+  deploy-sock-shop:
+    docker:
+      - image: 4568910/examcontainer
+    steps:
+      - checkout
+      - run:
+          name: Export Kubeconfig
+          command: |
+            kops export kubeconfig --admin
+
+      - run:
+          name: Deploy Sock-shop
+          command: |
+            kubectl create namespace sock-shop
+            kubectl apply -f microservices-demo/deploy/kubernetes/complete-demo.yaml
+      
+      - delete-sock-shop
+  
+  deploy-ingress-controller:
+    docker:
+      - image: 4568910/examcontainer
+    steps:
+      - checkout
+      - run:
+          name: Export Kubeconfig
+          command: |
+            kops export kubeconfig --admin
+            
+      - run:
+          name: Deploy ingress controller
+          command: |
+            kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.6.4/deploy/static/provider/cloud/deploy.yaml
+      
+
+  create-sockshop-ingress:
+    docker:
+      - image: 4568910/examcontainer
+    steps:
+      - checkout
+      - run:
+          name: Export Kubeconfig
+          command: |
+            kops export kubeconfig --admin
+
+      - run:
+          name: Create sock shop ingress
+          command: |
+            kubectl apply -f manifests/sock-ingress.yml 
+      
 
 
 
@@ -556,19 +592,17 @@ workflows:
       - terraform-plan
       - terraform-apply:
           requires: [terraform-plan]
-      - create-cluster:
-          requires: [terraform-apply]
-          filters:
-            branches:
-              only: [master]
-    
-      # - test-frontend:
-      #     requires: [build-frontend]
-      # - test-backend:
-      #     requires: [build-backend]
-      # - scan-backend:
-      #     requires: [build-backend]
-      # - scan-frontend:
+      # - create-cluster:
+      #     requires: [terraform-apply]
+      #     filters:
+      #       branches:
+      #         only: [master]    
+      - deploy-sock-shop:
+          requires: [create-cluster]
+      - deploy-ingress-controller
+      - create-sockshop-ingress:
+          requires: [deploy-ingress-controller]
+      # - create-so:
       #     requires: [build-frontend]
       # - deploy-infrastructure:
       #     requires: [test-frontend, test-backend, scan-frontend, scan-backend]
