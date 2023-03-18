@@ -72,7 +72,7 @@ jobs:
           paths: [.terraform]
           key: terraform-init
 
-    create-cluster:
+  create-cluster:
     docker:
       - image: 4568910/examcontainer
     steps:
