@@ -14,6 +14,14 @@ export AWS_SECRET_KEY_KOPS_USER=""
 
 
 ## Step 3: Run Terraform Plan and apply
+then...
+
+```bash
+export AWS_ACCESS_KEY=$AWS_ACCESS_KEY_ADMIN_USER
+export AWS_SECRET_KEY=$AWS_SECRET_KEY_ADMIN_USER
+```
+
+
 Run:
 ```bash
 terraform plan
@@ -28,12 +36,7 @@ export AWS_ACCESS_KEY_KOPS_USER=$(terraform output kops_iam_key | tr -d '"')
 export AWS_SECRET_KEY_KOPS_USER=$(terraform output kops_iam_secret | tr -d '"')
 ```
 
-then...
 
-```bash
-export AWS_ACCESS_KEY=$AWS_ACCESS_KEY_ADMIN_USER
-export AWS_SECRET_KEY=$AWS_SECRET_KEY_ADMIN_USER
-```
 
 Then configure nameserver based on output
 
@@ -45,7 +48,7 @@ use us-west-2
 ```bash
 
 
-export KOPS_CLUSTER_NAME=kops.nobleman.me
+export KOPS_CLUSTER_NAME=kops.davido.live
 export KOPS_BUCKET_NAME=$(terraform output kops_bucket_name | tr -d '"')
 export KOPS_STATE_STORE=s3://${KOPS_BUCKET_NAME}
 
@@ -62,6 +65,7 @@ kops create cluster \
     --control-plane-size $CONTROL_PLANE_SIZE \
     --discovery-store=${KOPS_STATE_STORE}/${KOPS_CLUSTER_NAME}/discovery \
     --yes
+
 ```
 
 Wait until cluster is ready before proceeding:

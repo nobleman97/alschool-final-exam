@@ -42,16 +42,16 @@ resource "aws_iam_access_key" "kops" {
 }
 
 resource "aws_route53_zone" "nobleman_me" {
-  name = "nobleman.me"
+  name = "davido.live"
 }
 
 resource "aws_route53_zone" "kops_nobleman_me" {
-  name = "kops.nobleman.me"
+  name = "kops.davido.live"
 }
 
 resource "aws_route53_record" "dev-ns" {
   zone_id = aws_route53_zone.nobleman_me.zone_id
-  name    = "kops.nobleman.me"
+  name    = "kops.davido.live"
   type    = "NS"
   ttl     = "30"
   records = aws_route53_zone.kops_nobleman_me.name_servers
