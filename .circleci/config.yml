@@ -53,8 +53,7 @@ jobs:
             terraform init
             terraform plan
       - save_cache:
-          paths: 
-            - [.terraform]
+          paths: [.terraform]
           key: terraform-init
 
   # build-backend:
