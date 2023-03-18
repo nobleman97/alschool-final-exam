@@ -56,7 +56,7 @@ jobs:
             terraform plan
       - save_cache:
           paths: 
-            - ~/.terraform/
+            - ./.terraform/
           key: terraform-{{ checksum "terraform/requirements.txt" }}
 
   # build-backend:
