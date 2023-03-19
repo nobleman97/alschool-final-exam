@@ -161,9 +161,8 @@ kubectl apply -f microservices-demo/deploy/kubernetes/manifests-logging
 ```
 
 
-# Troubleshooting
-- 1. If at any point in time
-
-
-
-timeout 2s ping lB | grep -oP '\(\K[\d.]+(?=\))'
+# Links:
+- Shop: http://shop.kops.davido.live
+- Adminer: http://adminer.kops.davido.live
+- Prometheus: http://prometheus.kops.davido.live
+- Grafana: http://grafana.kops.davido.live login using admin $ admin
