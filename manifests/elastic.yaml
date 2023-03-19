@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: elasticsearch
+  namespace: kube-system
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+    - host: elastic.kops.davido.live
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:  
+              service:
+                name: elasticsearch
+                port:
+                  number: 9200

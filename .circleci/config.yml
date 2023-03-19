@@ -167,11 +167,14 @@ jobs:
           command: |
             kubectl apply -f adminer
 
+            echo ""
+            echo "---------   -------NOTE!!!-----    --------------"
             LB_ADDR=$(kubectl get svc -n ingress-nginx | grep Load | awk '{print $4}')
             echo "$(timeout 3s traceroute $LB_ADDR | head -n 1 )"
             echo "NOTE the IP address of the LoadBalancer"
           
             echo "Use this info to configure the A name records in Route 53"  
+            echo "---------   -------------------    --------------"
 
   deploy-monitoring:
     docker:
@@ -190,21 +193,36 @@ jobs:
 
             kubectl apply -f manifests/monitoring-ingress.yml
 
+            echo ""
+            echo "---------   -------NOTE!!!-----    --------------"
             LB_ADDR=$(kubectl get svc -n ingress-nginx | grep Load | awk '{print $4}')
             echo "$(timeout 3s traceroute $LB_ADDR | head -n 1 )"
             echo "NOTE the IP address of the LoadBalancer"
 
-            echo "Use this info to configure the A name records in Route 53"          
+            echo "Use this info to configure the A name records in Route 53" 
+            echo "---------   -------------------    --------------"         
+
+
+  delete-cluster:
+    docker:
+      - image: 4568910/examcontainer
+    description: Deletes cluster 
+    steps:
+      - run:
+          name: Destroy cluster
+          command: |
+            kops delete cluster --name ${KOPS_CLUSTER_NAME} --state ${KOPS_STATE_STORE} --yes
+
 
 workflows:
   default:
     jobs:
-      - terraform-plan
-      - terraform-apply:
-          requires: [terraform-plan]
-          filters:
-            branches:
-              only: [master] 
+      # - terraform-plan
+      # - terraform-apply:
+      #     requires: [terraform-plan]
+      #     filters:
+      #       branches:
+      #         only: [master] 
       # - create-cluster:
       #     requires: [terraform-apply]
       #     filters:
@@ -215,7 +233,11 @@ workflows:
       # - deploy-ingress-controller
       # - create-sockshop-ingress:
       #     requires: [deploy-ingress-controller]
-      - deploy-adminer-app:
-          requires: [terraform-apply]
-      - deploy-monitoring:
-          requires: [deploy-adminer-app]
+      # - deploy-adminer-app:
+      #     requires: [terraform-apply]
+      # - deploy-monitoring:
+      #     requires: [deploy-adminer-app]
+      - delete-cluster
+
+
+

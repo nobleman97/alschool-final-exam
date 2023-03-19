@@ -147,6 +147,17 @@ kubectl apply -f microservices-demo/deploy/kubernetes/manifests-monitoring
  # Ensure that you change the host in all ingress files and 
  # create an appropriate A name record where necessary
 kubectl apply -f manifests/monitoring-ingress.yml
+
+
+```
+
+## Step 12: SetUp Monitoring
+```bash
+kubectl apply -f https://raw.githubusercontent.com/fluent/fluentd-kubernetes-daemonset/master/fluentd-daemonset-elasticsearch-rbac.yaml
+
+
+kubectl apply -f microservices-demo/deploy/kubernetes/manifests-logging
+
 ```
 
 
