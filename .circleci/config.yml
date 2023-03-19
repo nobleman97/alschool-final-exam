@@ -144,9 +144,8 @@ jobs:
       - run:
           name: Create sock shop ingress and show load balancer url
           command: |
-            kubectl apply -f manifests/sock-ingress.yml 
-
             sleep 20
+            kubectl apply -f manifests/sock-ingress.yml 
 
             LB_ADDR=$(kubectl get svc -n ingress-nginx | grep Load | awk '{print $4}')
             LB_IP=$(timeout 3s traceroute $LB_ADDR | head -n 1 )
@@ -165,6 +164,8 @@ jobs:
       - run:
           name: Create adminer app and resource
           command: |
+
+            sleep 20
             kubectl apply -f adminer
 
             echo ""
@@ -217,28 +218,28 @@ jobs:
 workflows:
   default:
     jobs:
-      - terraform-plan
-      - terraform-apply:
-          requires: [terraform-plan]
-          filters:
-            branches:
-              only: [master] 
-      - create-cluster:
-          requires: [terraform-apply]
-          filters:
-            branches:
-              only: [master]    
-      - deploy-sock-shop:
-          requires: [create-cluster]
-      - deploy-ingress-controller:
-          requires: [create-cluster]
-      - create-sockshop-ingress:
-          requires: [deploy-ingress-controller]
-      - deploy-adminer-app:
-          requires: [deploy-sock-shop]
-      - deploy-monitoring:
-          requires: [deploy-adminer-app]
-      # - delete-cluster
+      # - terraform-plan
+      # - terraform-apply:
+      #     requires: [terraform-plan]
+      #     filters:
+      #       branches:
+      #         only: [master] 
+      # - create-cluster:
+      #     requires: [terraform-apply]
+      #     filters:
+      #       branches:
+      #         only: [master]    
+      # - deploy-sock-shop:
+      #     requires: [create-cluster]
+      # - deploy-ingress-controller:
+      #     requires: [create-cluster]
+      # - create-sockshop-ingress:
+      #     requires: [deploy-ingress-controller]
+      # - deploy-adminer-app:
+      #     requires: [deploy-sock-shop]
+      # - deploy-monitoring:
+      #     requires: [deploy-adminer-app]
+      - delete-cluster
 
 
 
