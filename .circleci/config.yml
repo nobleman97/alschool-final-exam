@@ -215,28 +215,28 @@ jobs:
 workflows:
   default:
     jobs:
-      # - terraform-plan
-      # - terraform-apply:
-      #     requires: [terraform-plan]
-      #     filters:
-      #       branches:
-      #         only: [master] 
-      # - create-cluster:
-      #     requires: [terraform-apply]
-      #     filters:
-      #       branches:
-      #         only: [master]    
-      # - deploy-sock-shop:
-      #     requires: [create-cluster]
-      # - deploy-ingress-controller:
-      #     requires: [create-cluster]
-      # - create-sockshop-ingress:
-      #     requires: [deploy-ingress-controller]
-      # - deploy-adminer-app:
-      #     requires: [deploy-sock-shop]
-      # - deploy-monitoring:
-      #     requires: [deploy-adminer-app]
-      - delete-cluster
+      - terraform-plan
+      - terraform-apply:
+          requires: [terraform-plan]
+          filters:
+            branches:
+              only: [master] 
+      - create-cluster:
+          requires: [terraform-apply]
+          filters:
+            branches:
+              only: [master]    
+      - deploy-sock-shop:
+          requires: [create-cluster]
+      - deploy-ingress-controller:
+          requires: [create-cluster]
+      - create-sockshop-ingress:
+          requires: [deploy-ingress-controller]
+      - deploy-adminer-app:
+          requires: [deploy-sock-shop]
+      - deploy-monitoring:
+          requires: [deploy-adminer-app]
+      # - delete-cluster
 
 
 
