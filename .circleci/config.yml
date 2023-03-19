@@ -95,7 +95,7 @@ jobs:
 
             kops validate cluster --wait 10m
 
-      - destroy-cluster
+      # - destroy-cluster
 
   deploy-sock-shop:
     docker:
@@ -221,11 +221,11 @@ workflows:
           filters:
             branches:
               only: [master] 
-      - create-cluster:
-          requires: [terraform-apply]
-          filters:
-            branches:
-              only: [master]    
+      # - create-cluster:
+      #     requires: [terraform-apply]
+      #     filters:
+      #       branches:
+      #         only: [master]    
       - deploy-sock-shop:
           requires: [create-cluster]
       - deploy-ingress-controller:
