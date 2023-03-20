@@ -169,3 +169,8 @@ kubectl apply -f microservices-demo/deploy/kubernetes/manifests-logging
 
 # Grafana Running:
 ![Grafana Demo](./screenshots/grafana-demo.mp4)
+
+
+./screenshots/grafana-demo.mp4
+
+![Other Demo Video](https://www.youtube.com/watch?v=EcMKLwVlpJk)
