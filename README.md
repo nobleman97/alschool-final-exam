@@ -165,4 +165,7 @@ kubectl apply -f microservices-demo/deploy/kubernetes/manifests-logging
 - Shop: http://shop.kops.davido.live
 - Adminer: http://adminer.kops.davido.live
 - Prometheus: http://prometheus.kops.davido.live
-- Grafana: http://grafana.kops.davido.live login using admin $ admin
+- Grafana: http://grafana.kops.davido.live login using admin & admin
+
+# Grafana Running:
+![Grafana Demo](./screenshots/grafana-demo.mp4)
